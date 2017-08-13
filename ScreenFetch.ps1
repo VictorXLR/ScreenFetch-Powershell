@@ -17,26 +17,29 @@ Function Get-PrimaryResolution{ Param ($monitorArray)
 
 ####### Information Collection #########
 
-## Resolution Information
+## Resolution
 $PrimaryResolution = Get-PrimaryResolution([System.Windows.Forms.Screen]::AllScreens);
 $Horizontal = $PrimaryResolution.Item1;
 $Vertical = $PrimaryResolution.Item2;
 
-## Uptime Information
+## Uptime- Boot Time
 $uptime = ((gwmi Win32_OperatingSystem).ConvertToDateTime((gwmi Win32_OperatingSystem).LocalDateTime) - 
            (gwmi Win32_OperatingSystem).ConvertToDateTime((gwmi Win32_OperatingSystem).LastBootUpTime));
 
 ## Disk Information
+
 # Available Space
 $FreeDiskSize = (gwmi Win32_LogicalDisk).FreeSpace | select -f 1;
 $FreeDiskSizeGB = $FreeDiskSize / 1073741824;
 $FreeDiskSizeGB = "{0:N0}" -f $FreeDiskSizeGB;
+
 # Total Space
 $DiskSize = (gwmi Win32_LogicalDisk).size | select -f 1;
 $DiskSizeGB = $DiskSize / 1073741824;
 $DiskSizeGB = "{0:N0}" -f $DiskSizeGB;
 $FreeDiskPercent = ($FreeDiskSizeGB / $DiskSizeGB) * 100;
 $FreeDiskPercent = "{0:N0}" -f $FreeDiskPercent;
+
 # Used Space
 $UsedDiskSizeGB = $DiskSizeGB - $FreeDiskSizeGB;
 $UsedDiskPercent = ($UsedDiskSizeGB / $DiskSizeGB) * 100;
